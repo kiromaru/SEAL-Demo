@@ -1,0 +1,100 @@
+﻿<!-- Copyright (c) Microsoft Corporation. All rights reserved.
+     Licensed under the MIT license. -->
+<Window x:Class="SEALAzureFuncClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SEALAzureFuncClient"
+        mc:Ignorable="d"
+        Title="SEAL Azure Functions Demo" Height="500" Width="500"
+        Closing="OnMainWindowClose">
+
+    <Window.Resources>
+        <Style x:Key="DemoButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Margin" Value="0, 0, 5, 0" />
+            <Setter Property="Padding" Value="5, 2, 5, 2" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
+    
+    <Grid Margin="5,5,5,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Label Target="{Binding ElementName=HostAddress}">Connect to:</Label>
+            <TextBox x:Name="HostAddress"
+                     Margin="5,0,0,0"
+                     Width="400">localhost:7071</TextBox>
+        </StackPanel>
+        
+        <local:MatrixEditor x:Name="MatrixA"
+                            MatrixTitle="Matrix A"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="0,5,0,0"
+                            MatrixSizeChanged="OnMatrixASizeChanged" />
+        
+        <local:MatrixEditor x:Name="MatrixB"
+                            MatrixTitle="Matrix B"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="5,5,0,0"
+                            MatrixSizeChanged="OnMatrixBSizeChanged" />
+
+        <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
+            <Label DockPanel.Dock="Top" Target="{Binding ElementName=AddButton}" Content="Operations">
+                <Label.Style>
+                    <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
+                        <Setter Property="FontSize" Value="15" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                    </Style>
+                </Label.Style>
+            </Label>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Button x:Name="AddButton" Style="{StaticResource DemoButtonStyle}" IsEnabled="False" Click="OnAddClicked">Add</Button>
+                <Button x:Name="SubButton" Style="{StaticResource DemoButtonStyle}" IsEnabled="False" Click="OnSubtractClicked">Subtract</Button>
+                <Button x:Name="MulButton" Style="{StaticResource DemoButtonStyle}" IsEnabled="False" Click="OnMultiplyClicked">Multiply</Button>
+            </StackPanel>
+        </DockPanel>
+
+        <local:MatrixEditor x:Name="OperationResult"
+                            Grid.Row="3"
+                            Grid.ColumnSpan="2"
+                            Margin="0,5,0,0"
+                            Height="150"
+                            MatrixTitle="Result"
+                            IsReadOnly="True" />
+
+        <CheckBox x:Name="ShowOperations"
+                  Grid.Row="4"
+                  Margin="0,5,0,0"
+                  IsChecked="False">Show detailed operations</CheckBox>
+        
+        <TextBox x:Name="LogTextBox"
+                 IsReadOnly="True"
+                 Grid.Row="5"
+                 Grid.ColumnSpan="2"
+                 Margin="0,5,0,0"
+                 Visibility="{Binding Path=IsChecked, ElementName=ShowOperations, Converter={StaticResource BooleanToVisibilityConverter}}"
+                 Height="100"
+                 HorizontalScrollBarVisibility="Auto"
+                 VerticalScrollBarVisibility="Auto"
+                 ScrollViewer.CanContentScroll="True"
+                 Focusable="True" />
+    </Grid>
+</Window>
