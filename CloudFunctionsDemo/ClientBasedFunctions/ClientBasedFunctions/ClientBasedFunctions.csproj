@@ -86,6 +86,7 @@
     <Compile Include="BooleanToInvertedVisibilityConverter.cs" />
     <Compile Include="GlobalProperties.cs" />
     <Compile Include="Utilities.cs" />
+    <Compile Include="WidthConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

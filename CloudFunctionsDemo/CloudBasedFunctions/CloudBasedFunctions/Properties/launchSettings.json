@@ -2,7 +2,7 @@
   "profiles": {
     "SEAL AF Demo": {
       "commandName": "Executable",
-      "executablePath": "D:\\Progs\\Azure.Functions.Cli.win-x64.2.3.199",
+      "executablePath": "D:\\Progs\\Azure.Functions.Cli.win-x64.2.3.199\\func.exe",
       "commandLineArgs": "host start",
       "workingDirectory": "$(TargetDir)"
     }

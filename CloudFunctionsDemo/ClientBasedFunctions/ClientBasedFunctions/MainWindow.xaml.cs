@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SEALAzureFuncClient
 {
@@ -395,9 +396,9 @@ namespace SEALAzureFuncClient
             string json = $"{{ \"sid\": \"{sid}\", \"matrixa\": \"{b64a}\", \"matrixb\": \"{b64b}\" }}";
 
             double kbs = (b64a.Length + b64b.Length) / 1024.0;
-            Log($"Matrix A:\n{b64a}");
-            Log($"Matrix B:\n{b64b}");
-            Log($"Sending {kbs} KB of ciphertext data to Azure Function");
+            Log($"\nMatrix A:\n{Utilities.FormatCiphertext(ciphera)}");
+            Log($"\nMatrix B:\n{Utilities.FormatCiphertext(cipherb)}");
+            Log($"\nSending {kbs} KB of ciphertext data to Azure Function");
 
             Uri function = GetUri(operation, code);
             HttpContent content = new StringContent(json, Encoding.UTF8);
@@ -422,12 +423,12 @@ namespace SEALAzureFuncClient
             dynamic deserialized = JsonConvert.DeserializeObject(responseStr);
             string resultb64 = deserialized?.result;
 
-            Log($"Result:\n{resultb64}");
-
             Ciphertext result = Utilities.Base64ToCiphertext(resultb64, GlobalProperties.Context);
+            Log($"\nResult:\n{Utilities.FormatCiphertext(result)}");
+
             Plaintext plain = new Plaintext();
             decryptor_.Decrypt(result, plain);
-            Log($"Noise budget: {decryptor_.InvariantNoiseBudget(result)} bits");
+            Log($"\nNoise budget: {decryptor_.InvariantNoiseBudget(result)} bits");
 
             return plain;
         }
@@ -447,9 +448,9 @@ namespace SEALAzureFuncClient
             string json = $"{{ \"sid\": \"{sid}\", \"matrixa\": \"{b64matrixa}\", \"matrixb\": \"{b64matrixb}\" }}";
 
             double kbs = (b64matrixa.Length + b64matrixb.Length) / 1024.0;
-            Log($"Matrix A:\n{b64matrixa}");
-            Log($"Matrix B:\n{b64matrixb}");
-            Log($"Sending {kbs} KB of ciphertext data to Azure Function");
+            Log($"\nMatrix A:\n{Utilities.FormatCiphertext(matrixa.FirstOrDefault())}");
+            Log($"\nMatrix B:\n{Utilities.FormatCiphertext(matrixb)}");
+            Log($"\nSending {kbs} KB of ciphertext data to Azure Function");
 
             Uri function = GetUri("MatrixProduct", code);
             HttpContent content = new StringContent(json, Encoding.UTF8);
@@ -474,12 +475,12 @@ namespace SEALAzureFuncClient
             dynamic deserialized = JsonConvert.DeserializeObject(responseStr);
             string resultb64 = deserialized?.result;
 
-            Log($"Result:\n{resultb64}");
-
             Ciphertext resultCipher = Utilities.Base64ToCiphertext(resultb64, GlobalProperties.Context);
+            Log($"\nResult:\n{Utilities.FormatCiphertext(resultCipher)}");
+
             Plaintext result = new Plaintext();
             decryptor_.Decrypt(resultCipher, result);
-            Log($"Noise budget: {decryptor_.InvariantNoiseBudget(resultCipher)} bits");
+            Log($"\nNoise budget: {decryptor_.InvariantNoiseBudget(resultCipher)} bits");
 
             return result;
         }

@@ -18,6 +18,7 @@
         </Style>
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <local:WidthConverter x:Key="WidthConverter" />
     </Window.Resources>
     
     <Grid Margin="5,5,5,5">
@@ -27,12 +28,11 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
@@ -84,17 +84,20 @@
                   Grid.Row="4"
                   Margin="0,5,0,0"
                   IsChecked="False">Show detailed operations</CheckBox>
-        
-        <TextBox x:Name="LogTextBox"
-                 IsReadOnly="True"
-                 Grid.Row="5"
-                 Grid.ColumnSpan="2"
-                 Margin="0,5,0,0"
-                 Visibility="{Binding Path=IsChecked, ElementName=ShowOperations, Converter={StaticResource BooleanToVisibilityConverter}}"
-                 Height="100"
-                 HorizontalScrollBarVisibility="Auto"
-                 VerticalScrollBarVisibility="Auto"
-                 ScrollViewer.CanContentScroll="True"
-                 Focusable="True" />
+
+        <!--  -->
+        <Grid Grid.Column="2"
+              Grid.RowSpan="5"
+              Margin="5,0,0,0"
+              Width="{Binding Path=IsChecked, ElementName=ShowOperations, Converter={StaticResource WidthConverter}, ConverterParameter=300}"
+              Visibility="{Binding Path=IsChecked, ElementName=ShowOperations, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBox x:Name="LogTextBox"
+                     IsReadOnly="True"
+                     HorizontalScrollBarVisibility="Disabled"
+                     VerticalScrollBarVisibility="Auto"
+                     ScrollViewer.CanContentScroll="True"
+                     TextWrapping="Wrap"
+                     Focusable="True" />
+        </Grid>
     </Grid>
 </Window>

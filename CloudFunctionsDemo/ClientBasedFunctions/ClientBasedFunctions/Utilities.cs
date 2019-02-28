@@ -387,6 +387,29 @@ namespace SEALAzureFuncClient
         }
 
         /// <summary>
+        /// Format Ciphertext for logging purposes.
+        /// </summary>
+        /// <param name="cipher">Ciphertext to format</param>
+        /// <param name="characterLimit">Limit ciphertext to this many characters.</param>
+        /// <returns></returns>
+        public static string FormatCiphertext(Ciphertext cipher, int characterLimit = 100)
+        {
+            string cipherstr = null;
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                cipher.Save(ms);
+                byte[] bytes = ms.ToArray();
+                cipherstr = BitConverter.ToString(bytes).Replace("-", "");
+            }
+
+            bool needToLimit = cipherstr.Length > characterLimit;
+            int startIdx = needToLimit ? (cipherstr.Length - characterLimit) : 0;
+            string formatted = cipherstr.Substring(startIdx) + (needToLimit ? "..." : null);
+            return formatted;
+        }
+
+        /// <summary>
         /// Find the next power of two that is equal or larger to the provided value
         /// </summary>
         /// <param name="value">Value to find the next power of two for</param>
